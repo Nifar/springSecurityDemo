@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/springSecurity
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate.ddl-auto: validate
+    show-sql: false
+logging:
+  file.name: .springSecurity.log
+  level:
+    root: INFO
