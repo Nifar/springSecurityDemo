@@ -35,10 +35,10 @@ alter table if exists user_role
     add constraint FK_userrole_user foreign key (userid) references users;
 
 insert into roles(id, name)
-values (1, 'USER');
+values (1, 'ROLE_USER');
 
 insert into roles(id, name)
-values (2, 'ADMIN');
+values (2, 'ROLE_ADMIN');
 
 insert into users(id, username, password)
 values (1, 'user', '$2y$10$hvFxDDzbba4zbyI7UuEDm.ZZtyWeq7V3MFaxUJF707Av.DvwwV91y');

@@ -15,4 +15,9 @@ public class UserController {
         return String.format("Hello %s!", principal.getName());
     }
 
+    @GetMapping("/innerUser")
+    public String getInnerMethod(Principal principal) {
+        return String.format("Hello inner %s!", principal.getName());
+    }
+
 }

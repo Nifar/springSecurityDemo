@@ -2,8 +2,6 @@ package com.example.springsecuritydemo.config;
 
 import com.example.springsecuritydemo.service.UserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,15 +9,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -27,7 +22,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final DataSource dataSource;
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     private final BCryptPasswordEncoder encoder;
 
@@ -51,7 +46,36 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //                        "join users u on ur.userid = u.id where u.username = ?");
 //    }
 //
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
+    }
+
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/register").anonymous()
+                .antMatchers("/notSecure").permitAll()
+                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/user", "/user/**").hasRole("USER")
+                .antMatchers("/logout").authenticated()
+                .anyRequest().authenticated()
+                .and().httpBasic();
+//                and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .loginProcessingUrl("/authorize")
+//                .usernameParameter("username")
+//                .passwordParameter("password")
+//                .defaultSuccessUrl("/")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .logoutUrl("/logout")
+//                .logoutSuccessUrl("/");
     }
 }

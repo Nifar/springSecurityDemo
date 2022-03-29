@@ -10,7 +10,7 @@ public class NotSecureController {
 
     @GetMapping
     public String getMethod() {
-        return "This is Anonymous controller";
+        return "This is notSecure controller";
     }
 
 }
